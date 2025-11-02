@@ -22,3 +22,22 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Build and cache directories
+/build
+.phpstan.cache
+
+# Test artifacts
+/tests/Browser/Screenshots
+
+# IDE and editor files
+.editorconfig
+*.swp
+*.swo
+*~
+
+# OS files
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace

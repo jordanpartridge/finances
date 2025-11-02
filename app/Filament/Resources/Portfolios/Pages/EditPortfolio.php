@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\PortfolioResource\Pages;
+namespace App\Filament\Resources\Portfolios\Pages;
 
-use App\Filament\Resources\PortfolioResource;
-use Filament\Actions;
+use App\Filament\Resources\Portfolios\PortfolioResource;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPortfolio extends EditRecord
@@ -13,8 +13,7 @@ class EditPortfolio extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

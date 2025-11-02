@@ -13,6 +13,11 @@ uses(
     Tests\TestCase::class,
 )->in('Unit');
 
+uses(
+    Tests\TestCase::class,
+    RefreshDatabase::class,
+)->in('Browser');
+
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
