@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Portfolio;
+use Illuminate\Console\Command;
 
 use function Laravel\Prompts\table;
 
@@ -14,42 +16,45 @@ class ListPortfolios extends Command
      *
      * @var string
      */
-    protected $signature = "portfolio:list";
+    protected $signature = 'portfolio:list';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Displays a rich laravel prompt display of active portfolios and overview.";
+    protected $description = 'Displays a rich laravel prompt display of active portfolios and overview.';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $portfolios = Portfolio::all();
 
         if ($portfolios->isEmpty()) {
-            $this->info("No portfolios found.");
-            return;
+            $this->info('No portfolios found.');
+
+            return self::SUCCESS;
         }
 
-        table(
-            ["ID", "Name", "Description", "Value"],
-            $portfolios
-                ->map(
-                    fn($portfolio) => [
-                        $portfolio->id,
-                        $portfolio->name,
-                        $portfolio->description ?? "N/A",
-                        '$' . number_format($portfolio->calculateValue(), 2),
-                    ],
-                )
-                ->toArray(),
-        );
+        /** @var array<int, array<int, string>> $rows */
+        $rows = $portfolios
+            ->map(
+                fn (Portfolio $portfolio): array => [
+                    (string) $portfolio->id,
+                    $portfolio->name,
+                    $portfolio->description ?? 'N/A',
+                    '$'.number_format($portfolio->calculateValue(), 2),
+                ],
+            )
+            ->toArray();
 
-        $totalValue = $portfolios->sum(fn($portfolio) => $portfolio->calculateValue());
-        $this->info("Total Portfolio Value: $" . number_format($totalValue, 2));
+        table(['ID', 'Name', 'Description', 'Value'], $rows);
+
+        $totalValue = $portfolios->sum(fn (Portfolio $portfolio) => $portfolio->calculateValue());
+        $this->info('Total Portfolio Value: $'.number_format($totalValue, 2));
+
+        return self::SUCCESS;
     }
 }

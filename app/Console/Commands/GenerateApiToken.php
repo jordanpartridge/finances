@@ -28,8 +28,10 @@ class GenerateApiToken extends Command
      */
     public function handle(): int
     {
-        $email = $this->argument('email') ?? $this->ask('User email address');
-        $tokenName = $this->option('name');
+        $emailArg = $this->argument('email');
+        $email = is_string($emailArg) && $emailArg !== '' ? $emailArg : $this->ask('User email address');
+        assert(is_string($email));
+        $tokenName = (string) $this->option('name');
 
         $user = User::where('email', $email)->first();
 
@@ -43,7 +45,9 @@ class GenerateApiToken extends Command
             }
 
             $name = $this->ask('User name');
+            assert(is_string($name));
             $password = $this->secret('User password');
+            assert(is_string($password));
 
             $user = User::create([
                 'name' => $name,
@@ -51,7 +55,7 @@ class GenerateApiToken extends Command
                 'password' => bcrypt($password),
             ]);
 
-            $this->info("User created successfully.");
+            $this->info('User created successfully.');
         }
 
         $token = $user->createToken($tokenName);

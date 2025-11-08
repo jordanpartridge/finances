@@ -18,9 +18,9 @@ class PositionFactory extends Factory
     public function definition(): array
     {
         return [
-            "ticker" => $this->faker->unique()->company(),
-            "shares" => $this->faker->numberBetween(1, 1000),
-            "portfolio_id" => Portfolio::factory(),
+            'ticker' => $this->faker->unique()->company(),
+            'shares' => $this->faker->numberBetween(1, 1000),
+            'portfolio_id' => Portfolio::factory(),
         ];
     }
 }

@@ -24,7 +24,7 @@ class Position extends Model
     /**
      * Get the portfolio that owns this position.
      *
-     * @return BelongsTo
+     * @return BelongsTo<Portfolio, $this>
      */
     public function portfolio(): BelongsTo
     {
@@ -34,7 +34,7 @@ class Position extends Model
     /**
      * Get all transactions for this position.
      *
-     * @return HasMany
+     * @return HasMany<Transaction, $this>
      */
     public function transactions(): HasMany
     {

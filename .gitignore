@@ -40,3 +40,4 @@ Thumbs.db
 .LSOverride
 *.sublime-project
 *.sublime-workspace
+coverage/

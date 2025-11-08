@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Portfolio;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PortfolioController extends Controller
@@ -51,6 +53,7 @@ class PortfolioController extends Controller
     {
         $portfolio->load(['positions.transactions']);
 
+        /** @phpstan-ignore argument.type */
         return view('portfolios.show', compact('portfolio'));
     }
 
@@ -59,6 +62,7 @@ class PortfolioController extends Controller
      */
     public function edit(Portfolio $portfolio): View
     {
+        /** @phpstan-ignore argument.type */
         return view('portfolios.edit', compact('portfolio'));
     }
 

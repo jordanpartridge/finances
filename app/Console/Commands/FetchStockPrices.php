@@ -32,8 +32,9 @@ class FetchStockPrices extends Command
     public function handle(): int
     {
         // Check if we're in trading hours (unless --force flag is used)
-        if (!$this->option('force') && !$this->isMarketOpen()) {
+        if (! $this->option('force') && ! $this->isMarketOpen()) {
             $this->info('Market is closed. Skipping price fetch. Use --force to override.');
+
             return 0;
         }
 
@@ -44,17 +45,19 @@ class FetchStockPrices extends Command
 
         if (empty($tickers)) {
             $this->warn('No positions found. Nothing to fetch.');
+
             return 0;
         }
 
         $this->info(sprintf('Fetching prices for %d ticker(s)...', count($tickers)));
 
-        $priceService = new PriceService();
-        $priceRepository = new PriceRepository();
+        $priceService = new PriceService;
+        $priceRepository = new PriceRepository;
         $successCount = 0;
         $failureCount = 0;
 
         foreach ($tickers as $ticker) {
+            /** @var string $ticker */
             try {
                 $price = $priceService->getLatestPrice($ticker);
 

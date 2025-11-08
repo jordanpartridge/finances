@@ -12,12 +12,12 @@ class PriceService
     /**
      * Get the latest price for a stock symbol.
      *
-     * @param string $symbol The stock ticker symbol (e.g., 'TSLA', 'AAPL')
+     * @param  string  $symbol  The stock ticker symbol (e.g., 'TSLA', 'AAPL')
      * @return float The current price (midpoint between bid and ask)
      */
     public function getLatestPrice(string $symbol): float
     {
-        $connector = new AlpacaConnector();
+        $connector = new AlpacaConnector;
         $request = new GetLatestQuote($symbol);
 
         $response = $connector->send($request);
@@ -26,11 +26,12 @@ class PriceService
             throw new \Exception("Failed to fetch price for {$symbol}: {$response->status()}");
         }
 
+        /** @var array{quote: array{bp: float, ap: float}} $data */
         $data = $response->json();
 
         // Calculate midpoint between bid and ask
-        $bid = $data['quote']['bp'] ?? 0;
-        $ask = $data['quote']['ap'] ?? 0;
+        $bid = $data['quote']['bp'];
+        $ask = $data['quote']['ap'];
 
         return ($bid + $ask) / 2;
     }
@@ -38,8 +39,8 @@ class PriceService
     /**
      * Get the latest prices for multiple symbols.
      *
-     * @param array<string> $symbols Array of stock ticker symbols
-     * @return array<string, float> Array of symbol => price pairs
+     * @param  array<string>  $symbols  Array of stock ticker symbols
+     * @return array<string, float|null> Array of symbol => price pairs (null if fetch failed)
      */
     public function getLatestPrices(array $symbols): array
     {

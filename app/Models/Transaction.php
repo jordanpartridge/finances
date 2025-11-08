@@ -20,6 +20,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'position_id',
+        'stash_statement_id',
         'transaction_type',
         'quantity',
         'price_per_share',
@@ -46,10 +47,20 @@ class Transaction extends Model
     /**
      * Get the position that owns this transaction.
      *
-     * @return BelongsTo
+     * @return BelongsTo<Position, $this>
      */
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
+    }
+
+    /**
+     * Get the statement this transaction was imported from.
+     *
+     * @return BelongsTo<StashStatement, $this>
+     */
+    public function stashStatement(): BelongsTo
+    {
+        return $this->belongsTo(StashStatement::class);
     }
 }

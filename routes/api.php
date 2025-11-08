@@ -2,30 +2,41 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\Portfolios;
+use App\Http\Controllers\Api\Positions;
+use App\Http\Controllers\Api\Prices;
+use App\Http\Controllers\Api\Summary;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Portfolio endpoints
-    Route::get('/portfolios', [FinanceController::class, 'getPortfolios']);
-    Route::get('/portfolios/{id}', [FinanceController::class, 'getPortfolio']);
-    Route::post('/portfolios', [FinanceController::class, 'createPortfolio']);
-    Route::put('/portfolios/{id}', [FinanceController::class, 'updatePortfolio']);
-    Route::delete('/portfolios/{id}', [FinanceController::class, 'deletePortfolio']);
+    // Portfolios
+    Route::prefix('portfolios')->group(fn () => [
+        Route::get('/', Portfolios\Index::class),
+        Route::post('/', Portfolios\Store::class),
+        Route::get('/{portfolio}', Portfolios\Show::class),
+        Route::put('/{portfolio}', Portfolios\Update::class),
+        Route::delete('/{portfolio}', Portfolios\Destroy::class),
+    ]);
 
-    // Position endpoints
-    Route::get('/positions', [FinanceController::class, 'getPositions']);
-    Route::get('/positions/{id}', [FinanceController::class, 'getPosition']);
-    Route::post('/positions', [FinanceController::class, 'createPosition']);
-    Route::put('/positions/{id}', [FinanceController::class, 'updatePosition']);
-    Route::delete('/positions/{id}', [FinanceController::class, 'deletePosition']);
+    // Positions
+    Route::prefix('positions')->group(fn () => [
+        Route::get('/', Positions\Index::class),
+        Route::post('/', Positions\Store::class),
+        Route::get('/{position}', Positions\Show::class),
+        Route::put('/{position}', Positions\Update::class),
+        Route::delete('/{position}', Positions\Destroy::class),
+    ]);
 
-    // Price endpoints
-    Route::get('/prices/latest', [FinanceController::class, 'getLatestPrices']);
-    Route::get('/prices/{ticker}', [FinanceController::class, 'getPriceHistory']);
+    // Prices
+    Route::prefix('prices')->group(fn () => [
+        Route::get('/latest', Prices\Index::class),
+        Route::get('/{ticker}', Prices\Show::class),
+    ]);
 
-    // Summary/dashboard endpoints
-    Route::get('/summary', [FinanceController::class, 'getSummary']);
-    Route::get('/summary/value', [FinanceController::class, 'getTotalValue']);
-    Route::get('/summary/last-update', [FinanceController::class, 'getLastPriceUpdate']);
+    // Summary
+    Route::prefix('summary')->group(fn () => [
+        Route::get('/', Summary\Index::class),
+        Route::get('/value', Summary\ShowValue::class),
+        Route::get('/last-update', Summary\ShowLastUpdate::class),
+    ]);
 });
