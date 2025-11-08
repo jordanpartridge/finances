@@ -12,8 +12,7 @@ class PriceRepository
     /**
      * Store a price record from API data.
      *
-     * @param array<string, mixed> $data
-     * @return Price
+     * @param  array<string, mixed>  $data
      */
     public function storeFromApiData(array $data): Price
     {
@@ -55,7 +54,7 @@ class PriceRepository
     /**
      * Get prices for multiple tickers at the latest timestamp.
      *
-     * @param array<int, string> $tickers
+     * @param  array<int, string>  $tickers
      * @return Collection<int, Price>
      */
     public function getLatestForMultiple(array $tickers): Collection

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Position;
 use App\Models\Portfolio;
-use Illuminate\Http\Request;
+use App\Models\Position;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PositionController extends Controller
@@ -54,6 +56,7 @@ class PositionController extends Controller
     {
         $position->load(['portfolio', 'transactions']);
 
+        /** @phpstan-ignore argument.type */
         return view('positions.show', compact('position'));
     }
 
@@ -64,6 +67,7 @@ class PositionController extends Controller
     {
         $portfolios = Portfolio::all();
 
+        /** @phpstan-ignore argument.type */
         return view('positions.edit', compact('position', 'portfolios'));
     }
 

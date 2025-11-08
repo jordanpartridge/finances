@@ -6,7 +6,6 @@ use App\Models\Portfolio;
 use App\Models\Position;
 use App\Models\Price;
 use App\Models\Transaction;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StashIraSeeder extends Seeder

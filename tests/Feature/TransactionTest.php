@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Position;
 use App\Models\Portfolio;
+use App\Models\Position;
 use App\Models\Transaction;
 
 it('can be created', function () {

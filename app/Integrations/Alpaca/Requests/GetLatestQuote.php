@@ -13,8 +13,7 @@ class GetLatestQuote extends Request
 
     public function __construct(
         private string $symbol,
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

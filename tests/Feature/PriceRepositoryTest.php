@@ -4,7 +4,7 @@ use App\Models\Price;
 use App\Repositories\PriceRepository;
 
 it('can store price from api data', function () {
-    $repo = new PriceRepository();
+    $repo = new PriceRepository;
     $data = [
         'ticker' => 'AAPL',
         'bid' => 150.50,
@@ -28,7 +28,7 @@ it('can get latest price for a ticker', function () {
     Price::factory()->create(['ticker' => 'TSLA', 'quoted_at' => $oldTime]);
     Price::factory()->create(['ticker' => 'TSLA', 'quoted_at' => $newTime]);
 
-    $repo = new PriceRepository();
+    $repo = new PriceRepository;
     $latest = $repo->getLatest('TSLA');
 
     expect($latest)->not->toBeNull();
@@ -37,7 +37,7 @@ it('can get latest price for a ticker', function () {
 });
 
 it('returns null when ticker has no price', function () {
-    $repo = new PriceRepository();
+    $repo = new PriceRepository;
     $latest = $repo->getLatest('NONEXISTENT');
 
     expect($latest)->toBeNull();
@@ -52,7 +52,7 @@ it('can get price history for a ticker', function () {
     Price::factory()->create(['ticker' => 'NVDA', 'quoted_at' => $time2]);
     Price::factory()->create(['ticker' => 'NVDA', 'quoted_at' => $time3]);
 
-    $repo = new PriceRepository();
+    $repo = new PriceRepository;
     $history = $repo->getHistory('NVDA');
 
     expect($history)->toHaveCount(3);
@@ -64,7 +64,7 @@ it('can get latest prices for multiple tickers', function () {
     Price::factory()->create(['ticker' => 'TSLA', 'quoted_at' => now()]);
     Price::factory()->create(['ticker' => 'NVDA', 'quoted_at' => now()]);
 
-    $repo = new PriceRepository();
+    $repo = new PriceRepository;
     $prices = $repo->getLatestForMultiple(['AAPL', 'TSLA', 'NVDA']);
 
     expect($prices)->toHaveCount(3);

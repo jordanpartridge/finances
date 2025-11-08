@@ -6,7 +6,16 @@
       "Bash(then echo \"exists\")",
       "Bash(else echo \"not found\")",
       "Bash(fi)",
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo view:*)",
+      "Bash(gh repo clone:*)",
+      "mcp__puppeteer__puppeteer_click",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "Bash(conduit list:*)",
+      "Bash(conduit component:config:*)"
     ],
     "deny": [],
     "ask": []

@@ -18,7 +18,7 @@ class Portfolio extends Model
      *
      * @var list<string>
      */
-    protected $fillable = ["name", "description", "type"];
+    protected $fillable = ['name', 'description', 'type'];
 
     /**
      * Get the attributes that should be cast.
@@ -33,7 +33,7 @@ class Portfolio extends Model
     /**
      * Get all positions for this portfolio.
      *
-     * @return HasMany
+     * @return HasMany<Position, $this>
      */
     public function positions(): HasMany
     {
@@ -43,12 +43,10 @@ class Portfolio extends Model
     /**
      * Calculate the total value of the portfolio based on positions.
      * Value = sum of all (position.shares * latest_price_from_price_table)
-     *
-     * @return float
      */
     public function calculateValue(): float
     {
-        return (float) $this->positions->sum(function ($position) {
+        return (float) $this->positions->sum(function (Position $position) {
             $latestPrice = Price::where('ticker', $position->ticker)
                 ->orderByDesc('quoted_at')
                 ->first();
