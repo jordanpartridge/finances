@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Build and cache directories
+/build
+.phpstan.cache
