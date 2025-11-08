@@ -31,7 +31,6 @@ Thumbs.db
 /tests/Browser/Screenshots
 
 # IDE and editor files
-.editorconfig
 *.swp
 *.swo
 *~
