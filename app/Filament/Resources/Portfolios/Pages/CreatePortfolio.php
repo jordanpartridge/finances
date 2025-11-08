@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\PortfolioResource\Pages;
+namespace App\Filament\Resources\Portfolios\Pages;
 
-use App\Filament\Resources\PortfolioResource;
+use App\Filament\Resources\Portfolios\PortfolioResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePortfolio extends CreateRecord

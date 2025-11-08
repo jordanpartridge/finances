@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\PositionResource\Pages;
+namespace App\Filament\Resources\Positions\Pages;
 
-use App\Filament\Resources\PositionResource;
+use App\Filament\Resources\Positions\PositionResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePosition extends CreateRecord

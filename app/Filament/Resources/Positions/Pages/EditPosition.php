@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\PositionResource\Pages;
+namespace App\Filament\Resources\Positions\Pages;
 
-use App\Filament\Resources\PositionResource;
-use Filament\Actions;
+use App\Filament\Resources\Positions\PositionResource;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPosition extends EditRecord
@@ -13,8 +13,7 @@ class EditPosition extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }
