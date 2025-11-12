@@ -32,18 +32,18 @@ class PortfolioState extends State
      */
     public function value(): float
     {
-        $positionValue = collect($this->positions)->sum(function ($position, $ticker) {
+        $positionValue = collect($this->positions)->reduce(function (float $total, array $position, string $ticker) {
             // Get latest price for this ticker
             $latestPrice = \App\Models\Price::where('ticker', $ticker)
                 ->latest('quoted_at')
                 ->first();
 
             if (!$latestPrice) {
-                return 0;
+                return $total;
             }
 
-            return $position['shares'] * $latestPrice->midpoint();
-        });
+            return $total + ($position['shares'] * (float) $latestPrice->midpoint());
+        }, 0.0);
 
         return $positionValue + $this->cash;
     }
