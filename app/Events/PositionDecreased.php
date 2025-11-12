@@ -26,6 +26,9 @@ class PositionDecreased extends Event
         $currentShares = $state->positions[$this->ticker]['shares'];
         $newShares = $currentShares - $this->shares;
 
+        // Safety check: ensure we never end up with invalid share counts
+        assert($newShares > 0, 'Resulting shares must be positive after decrease');
+
         $state->positions[$this->ticker]['shares'] = $newShares;
     }
 
