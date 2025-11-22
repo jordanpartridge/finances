@@ -22,9 +22,19 @@ class Position extends Model
     protected $fillable = ['ticker', 'shares', 'portfolio_id'];
 
     /**
-     * Get the portfolio that owns this position.
+     * Get the attributes that should be cast.
      *
-     * @return BelongsTo
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'shares' => 'decimal:8',
+        ];
+    }
+
+    /**
+     * Get the portfolio that owns this position.
      */
     public function portfolio(): BelongsTo
     {
@@ -33,8 +43,6 @@ class Position extends Model
 
     /**
      * Get all transactions for this position.
-     *
-     * @return HasMany
      */
     public function transactions(): HasMany
     {

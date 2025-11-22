@@ -18,7 +18,7 @@ class FinanceController extends Controller
      */
     public function getPortfolios(): JsonResponse
     {
-        $portfolios = Portfolio::all()->map(function ($portfolio) {
+        $portfolios = Portfolio::all()->map(function (Portfolio $portfolio) {
             return [
                 'id' => $portfolio->id,
                 'name' => $portfolio->name,
@@ -53,11 +53,11 @@ class FinanceController extends Controller
                 'description' => $portfolio->description,
                 'type' => $portfolio->type,
                 'current_value' => $portfolio->calculateValue(),
-                'positions' => $portfolio->positions->map(function ($position) {
+                'positions' => $portfolio->positions->map(function (Position $position) {
                     $price = Price::where('ticker', $position->ticker)
                         ->latest('quoted_at')
                         ->first();
-                    $current_price = $price ? $price->midpoint() : null;
+                    $current_price = $price ? (float) $price->midpoint() : null;
 
                     return [
                         'id' => $position->id,
@@ -132,16 +132,19 @@ class FinanceController extends Controller
      */
     public function getPositions(): JsonResponse
     {
-        $positions = Position::with('portfolio')->get()->map(function ($position) {
+        $positions = Position::with('portfolio')->get()->map(function (Position $position) {
             $price = Price::where('ticker', $position->ticker)
                 ->latest('quoted_at')
                 ->first();
-            $current_price = $price ? $price->midpoint() : null;
+            $current_price = $price ? (float) $price->midpoint() : null;
+
+            /** @var Portfolio|null $portfolio */
+            $portfolio = $position->portfolio;
 
             return [
                 'id' => $position->id,
                 'portfolio_id' => $position->portfolio_id,
-                'portfolio_name' => $position->portfolio?->name,
+                'portfolio_name' => $portfolio?->name,
                 'ticker' => $position->ticker,
                 'shares' => (float) $position->shares,
                 'current_price' => $current_price,
@@ -166,14 +169,16 @@ class FinanceController extends Controller
         $price = Price::where('ticker', $position->ticker)
             ->latest('quoted_at')
             ->first();
-        $current_price = $price ? $price->midpoint() : null;
+        $current_price = $price ? (float) $price->midpoint() : null;
+        /** @var Portfolio|null $portfolio */
+        $portfolio = $position->portfolio;
 
         return response()->json([
             'success' => true,
             'data' => [
                 'id' => $position->id,
                 'portfolio_id' => $position->portfolio_id,
-                'portfolio_name' => $position->portfolio?->name,
+                'portfolio_name' => $portfolio?->name,
                 'ticker' => $position->ticker,
                 'shares' => (float) $position->shares,
                 'current_price' => $current_price,
@@ -247,12 +252,12 @@ class FinanceController extends Controller
             ->pluck('id')
             ->toArray();
 
-        $latestPrices = Price::whereIn('id', $prices)->get()->map(function ($price) {
+        $latestPrices = Price::whereIn('id', $prices)->get()->map(function (Price $price) {
             return [
                 'ticker' => $price->ticker,
                 'bid' => (float) $price->bid,
                 'ask' => (float) $price->ask,
-                'midpoint' => $price->midpoint(),
+                'midpoint' => (float) $price->midpoint(),
                 'quoted_at' => $price->quoted_at,
             ];
         });
@@ -273,11 +278,11 @@ class FinanceController extends Controller
             ->orderByDesc('quoted_at')
             ->limit(50)
             ->get()
-            ->map(function ($price) {
+            ->map(function (Price $price) {
                 return [
                     'bid' => (float) $price->bid,
                     'ask' => (float) $price->ask,
-                    'midpoint' => $price->midpoint(),
+                    'midpoint' => (float) $price->midpoint(),
                     'quoted_at' => $price->quoted_at,
                 ];
             });
@@ -295,9 +300,10 @@ class FinanceController extends Controller
      */
     public function getSummary(): JsonResponse
     {
-        $totalValue = Portfolio::all()->sum(fn ($p) => $p->calculateValue());
+        $totalValue = Portfolio::all()->sum(fn (Portfolio $p) => $p->calculateValue());
         $portfolioCount = Portfolio::count();
         $positionCount = Position::count();
+        /** @var \Illuminate\Support\Carbon|null $lastUpdate */
         $lastUpdate = Price::latest('quoted_at')->first()?->quoted_at;
 
         return response()->json([
@@ -317,7 +323,7 @@ class FinanceController extends Controller
      */
     public function getTotalValue(): JsonResponse
     {
-        $totalValue = Portfolio::all()->sum(fn ($p) => $p->calculateValue());
+        $totalValue = Portfolio::all()->sum(fn (Portfolio $p) => $p->calculateValue());
 
         return response()->json([
             'success' => true,
@@ -333,14 +339,17 @@ class FinanceController extends Controller
      */
     public function getLastPriceUpdate(): JsonResponse
     {
+        /** @var Price|null $lastUpdate */
         $lastUpdate = Price::latest('quoted_at')->first();
+        /** @var \Illuminate\Support\Carbon|null $quotedAt */
+        $quotedAt = $lastUpdate?->quoted_at;
 
         return response()->json([
             'success' => true,
             'data' => [
-                'timestamp' => $lastUpdate?->quoted_at,
-                'human_readable' => $lastUpdate?->quoted_at->diffForHumans(),
-                'is_fresh' => $lastUpdate ? $lastUpdate->quoted_at->diffInHours(now()) < 24 : false,
+                'timestamp' => $quotedAt,
+                'human_readable' => $quotedAt?->diffForHumans(),
+                'is_fresh' => $quotedAt ? $quotedAt->diffInHours(now()) < 24 : false,
             ],
         ]);
     }
