@@ -11,10 +11,6 @@ uses(
 
 uses(
     Tests\TestCase::class,
-)->in('Unit');
-
-uses(
-    Tests\TestCase::class,
     RefreshDatabase::class,
 )->in('Browser');
 
